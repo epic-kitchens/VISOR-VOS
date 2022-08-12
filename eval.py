@@ -184,7 +184,7 @@ if __name__ == "__main__":
         parser.add_argument("-s", type=str, help="set", required=True)
         parser.add_argument("-y", type=int, help="year", required=True)
         parser.add_argument("-D", type=str, help="path to data",default='/smart/haochen/cvpr/data/DAVIS/')
-        parser.add_argument("-backbone", type=str, help="backbone ['resnet50', 'resnet18','resnest101']",default='resnet50')
+        parser.add_argument("-backbone", type=str, help="backbone['resnet50', 'resnet18','resnest101']",default='resnet50')
         parser.add_argument("-p", type=str, help="path to weights",default='/smart/haochen/cvpr/weights/davis_youtube_resnet50_799999.pth')
         return parser.parse_args()
 
