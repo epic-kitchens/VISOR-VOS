@@ -57,11 +57,11 @@ palette = Image.open('/jmain02/home/J2AD001/wwp01/shared/data/DAVIS_FOR_EVAL/000
 
 torch.backends.cudnn.benchmark = True
 
-Trainset_sparse = DAVIS_MO_Train(DATA_ROOT, resolution='480p', imset='20{}/{}.txt'.format(17,'train'), single_object=False)
+Trainset_sparse = DAVIS_MO_Train(DATA_ROOT, resolution='480p', imset='20{}/{}.txt'.format(17,'train_val'), single_object=False)
 Trainloader_sparse = data.DataLoader(Trainset_sparse, batch_size=1, num_workers=1,shuffle = True, pin_memory=True)
 loader_iter_sparse = iter(Trainloader_sparse)
 
-Testloader = DAVIS_MO_Test(DATA_ROOT, resolution='480p_val', imset='20{}/{}.txt'.format(17,'val'), single_object=False)
+Testloader = DAVIS_MO_Test(DATA_ROOT, resolution='480p_test', imset='20{}/{}.txt'.format(17,'test_sample'), single_object=False)
 
 model = nn.DataParallel(STM(args.backbone))
 pth_path = args.resume_path
@@ -109,11 +109,11 @@ change_skip_step = args.total_iter/(max_skip+1)
 skip_n = 0
 max_jf = 0
 os.environ['WANDB_MODE'] = "offline"
-wandb.init(project="train_val",name=f"{args.name}",config={
+wandb.init(project="official_release",name=f"{args.name}",config={
       "batch": accumulation_step,
-      "initialization": "scratch",
+      "initialization": "scratch_train_val",
       "architecture": "CNN",
-      "split": "train/val",
+      "split": "train_val=>test",
       "iterations": args.total_iter,
       "save_step":save_step,
       "max_skip":max_skip,

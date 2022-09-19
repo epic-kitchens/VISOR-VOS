@@ -89,8 +89,8 @@ def Run_video(dataset,video, num_frames, num_objects,model,Mem_every=None, Mem_n
         ##this to save images
         palette = Image.open('/jmain02/home/J2AD001/wwp01/shared/data/DAVIS_FOR_EVAL/00000.png').getpalette()
 
-        print(video)
-        test_path = os.path.join('/jmain02/home/J2AD001/wwp01/axd53-wwp01/codes/results_test_yt_unseen', video)
+        #print(video)
+        test_path = os.path.join('/jmain02/home/J2AD001/wwp01/axd53-wwp01/codes/results_official_test_unseen', video)
 
         if not os.path.exists(test_path):
             os.makedirs(test_path)
@@ -121,6 +121,7 @@ def evaluate_semisupervised(all_gt_masks, all_res_masks, all_void_masks, metric)
         zero_padding = np.zeros((all_gt_masks.shape[0] - all_res_masks.shape[0], *all_res_masks.shape[1:]))
         all_res_masks = np.concatenate([all_res_masks, zero_padding], axis=0)
     j_metrics_res, f_metrics_res = np.zeros(all_gt_masks.shape[:2]), np.zeros(all_gt_masks.shape[:2])
+    ##print('J_metric: ', j_metrics_res.shape)
     for ii in range(all_gt_masks.shape[0]):
         if 'J' in metric:
             j_metrics_res[ii, :] = db_eval_iou(all_gt_masks[ii, ...], all_res_masks[ii, ...], all_void_masks)
@@ -142,7 +143,7 @@ def evaluate(model,Testloader,metric):
         num_objects, info = V
         seq_name = info['name']
         num_frames = info['num_frames']
-        #print('[{}]: num_frames: {}, num_objects: {}'.format(seq_name, num_frames, num_objects.numpy()[0]))
+        ##print('[{}]: num_frames: {}, num_objects: {}'.format(seq_name, num_frames, num_objects.numpy()[0]))
 
         pred,Ms = Run_video(Testloader, seq_name, num_frames, num_objects,model,Mem_every=None, Mem_number=2) ##  THIS IS UPDATEEEEEEEDDDD
         # all_res_masks = Es[0].cpu().numpy()[1:1+num_objects]
@@ -155,6 +156,7 @@ def evaluate(model,Testloader,metric):
         j_metrics_res, f_metrics_res = evaluate_semisupervised(all_gt_masks, all_res_masks, None, metric)
         for ii in range(all_gt_masks.shape[0]):
             if 'J' in metric:
+                print('>> J : ',j_metrics_res[ii])
                 [JM, JR, JD] = utils.db_statistics(j_metrics_res[ii])
                 metrics_res['J']["M"].append(JM)
                 metrics_res['J']["R"].append(JR)
@@ -166,7 +168,7 @@ def evaluate(model,Testloader,metric):
                 metrics_res['F']["D"].append(FD)
 
     J, F = metrics_res['J'], metrics_res['F']
-    print(len(J["M"]))
+    #print(len(J["M"]))
     g_measures = ['J&F-Mean', 'J-Mean', 'J-Recall', 'J-Decay', 'F-Mean', 'F-Recall', 'F-Decay']
     final_mean = (np.mean(J["M"]) + np.mean(F["M"])) / 2.
     g_res = np.array([final_mean, np.mean(J["M"]), np.mean(J["R"]), np.mean(J["D"]), np.mean(F["M"]), np.mean(F["R"]),
