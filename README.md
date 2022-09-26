@@ -18,17 +18,18 @@ This repository contains the codes to train STM on [VISOR](https://epic-kitchens
 
 #### Dataset Structure
 ```
-|- VISOR
-  |- JPEGImages
-  |- Annotations
-  |- ImageSets
-     |- train.txt
-     |- val.txt
-     |- val_unseen.txt
 
-|- MS-COCO
-  |- train2017
-  |- annotations
-      |- instances_train2017.json
+	|- VISOR
+	  |- JPEGImages
+	  |- Annotations
+	  |- ImageSets
+	     |- train.txt
+	     |- val.txt
+	     |- val_unseen.txt
+
+	|- MS-COCO
+	  |- train2017
+	  |- annotations
+	      |- instances_train2017.json
 ```
 
