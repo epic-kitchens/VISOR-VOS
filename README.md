@@ -3,6 +3,15 @@
 
 This repository contains the codes to train STM on [VISOR](https://epic-kitchens.github.io/VISOR/) dataset [Space-Time Memory Networks (STM)](https://openaccess.thecvf.com/content_ICCV_2019/html/Oh_Video_Object_Segmentation_Using_Space-Time_Memory_Networks_ICCV_2019_paper.html)
 
+<br>
+
+## Performance on VISOR
+
+|  | backbone |  training stage | training dataset | J&F | J |  F  | weights |
+| ------------- | ------------- | ------------- | ------------- | ------------- | ------------- | ------------- | ------------- |
+| resnet-50 |  stage 1 | MS-COCO | 56.9 | 55.5 | 58.2 | [`link`](https://www.dropbox.com/s/bsy577kflurboav/coco_res50.pth?dl=0) |
+| resnet-50 | stage 2 | MS-COCO -> VISOR | 75.8 | 73.6 | 78.0 | [`link`](https://www.dropbox.com/s/6vkkr6vbx7ybku3/coco_lr_fix_skip_0_1_release_resnet50_400000_32_399999.pth?dl=0) |
+
 
 # Requirements
 - Python 3.9.7
