@@ -1,5 +1,6 @@
 # VISOR-VOS
 
+This repository contains the code to replicate the Video Object Segmentations benchmark of the VISOR dataset. It replicates the results of table 3 in our paper: EPIC-KITCHENS VISOR Benchmark: VIdeo Segmentations and Object Relations
 
 This repository contains the codes to train STM on [VISOR](https://epic-kitchens.github.io/VISOR/) dataset [Space-Time Memory Networks (STM)](https://openaccess.thecvf.com/content_ICCV_2019/html/Oh_Video_Object_Segmentation_Using_Space-Time_Memory_Networks_ICCV_2019_paper.html)
 
@@ -82,8 +83,6 @@ python eval.py -g "gpu id" -s "set" -y "year" -D "path to visor" -p "path to wei
 python eval.py -g 0 -s val -y 17 -D ../data/VISOR -p ../visor_weights/coco_lr_fix_skip_0_1_release_resnet50_400000_32_399999.pth -backbone resnet50
 ```
 
-
-
 ## Acknowledgement
 
 When use this repo, any of our models or dataset, you need to cite the VISOR paper
@@ -110,3 +109,7 @@ We use the code in the original STM implementation from [official STM repository
   year={2019}
 }
 ```
+
+# License
+
+The code is published under the Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License, found [here](https://creativecommons.org/licenses/by-nc-sa/4.0/).
