@@ -60,7 +60,7 @@ python train_coco.py -Dvisor ../data/Davis/ -Dcoco ../data/Ms-COCO/ -backbone re
 #### Stage 2
 Main traning on VISOR, to get the best performance, you should resume from the MS-COCO pretrained model in Stage 1.
 ```
-python train_stm_baseline.py -Dvisor "path to davis" -Dyoutube "path to youtube-vos" -backbone "[resnet50,resnet18]" -save "path to checkpoints" -resume "path to coco pretrained weights"
+python train_stm_baseline.py -Dvisor "path to visor" -backbone "[resnet50,resnet18]" -save "path to checkpoints" -resume "path to coco pretrained weights"
 #e.g. 
 train_stm_baseline.py -Dvisor ../data/VISOR/ -backbone resnet50 -save ../visor_weights/ -resume ../coco_weights/coco_res50.pth
 ```
