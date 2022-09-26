@@ -6,7 +6,7 @@ This repository contains the codes to train STM on [VISOR](https://epic-kitchens
 
 <br>
 
-## Performance on VISOR
+## Download pre-trained models
 
 | backbone |  training stage | training dataset | J&F | J |  F  | weights |
 | ------------- | ------------- | ------------- | ------------- | ------------- | ------------- | ------------- |
