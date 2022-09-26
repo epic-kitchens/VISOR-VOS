@@ -13,6 +13,7 @@ This repository contains the codes to train STM on [VISOR](https://epic-kitchens
 - Scipy 1.7.1
 - Tqdm 4.62.3
 - Pandas 1.3.4
+- Torchvision 0.12.0
 
 ## Datasets
 
@@ -28,6 +29,7 @@ After pretrain on MS-COCO, we fine-tune on VISOR dataset by sample 3 frames from
 
 
 #### Dataset Structure
+To run the training or evaluation scripts, the dataset format should be as follows (following [DAVIS](https://davischallenge.org/) format):
 ```
 
 |- VISOR
@@ -42,5 +44,24 @@ After pretrain on MS-COCO, we fine-tune on VISOR dataset by sample 3 frames from
   |- train2017
   |- annotations
       |- instances_train2017.json
+```
+
+
+## Training
+
+#### Stage 1
+To pretrain on MS-COCO, you can run the following command.
+```
+python train_coco.py -Dvisor "path to visor" -Dcoco "path to coco" -backbone "[resnet50,resnet18]" -save "path to checkpoints"
+#e.g.
+python train_coco.py -Dvisor ../data/Davis/ -Dcoco ../data/Ms-COCO/ -backbone resnet50 -save ../coco_weights/
+```
+
+#### Stage 2
+Main traning on VISOR, to get the best performance, you should resume from the MS-COCO pretrained model in Stage 1.
+```
+python train_stm_baseline.py -Dvisor "path to davis" -Dyoutube "path to youtube-vos" -backbone "[resnet50,resnet18]" -save "path to checkpoints" -resume "path to coco pretrained weights"
+#e.g. 
+train_stm_baseline.py -Dvisor ../data/VISOR/ -backbone resnet50 -save ../visor_weights/ -resume ../coco_weights/coco_res50.pth
 ```
 
