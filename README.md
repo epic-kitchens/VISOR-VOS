@@ -65,3 +65,24 @@ python train_stm_baseline.py -Dvisor "path to visor" -backbone "[resnet50,resnet
 train_stm_baseline.py -Dvisor ../data/VISOR/ -backbone resnet50 -save ../visor_weights/ -resume ../coco_weights/coco_res50.pth
 ```
 
+## Evaluation
+Evaluating on VISOR based on DAVIS evaluation codes, we adjusted the codes to include the last frame of the sequence in our scores 
+```
+python eval.py -g "gpu id" -s "set" -y "year" -D "path to visor" -p "path to weights" -backbone "[resnet50,resnet18,resnest101]"
+#e.g.
+python eval.py -g 0 -s val -y 17 -D ../data/VISOR -p ../visor_weights/coco_lr_fix_skip_0_1_release_resnet50_400000_32_399999.pth -backbone resnet50
+```
+
+
+## Acknowledgement
+We use the code in the original STM implementation from [official STM repository](https://github.com/seoungwugoh/STM) and the implementation from [STM training repository](https://github.com/haochenheheda/Training-Code-of-STM)
+## Citing STM
+```
+@inproceedings{oh2019video,
+  title={Video object segmentation using space-time memory networks},
+  author={Oh, Seoung Wug and Lee, Joon-Young and Xu, Ning and Kim, Seon Joo},
+  booktitle={Proceedings of the IEEE/CVF International Conference on Computer Vision},
+  pages={9226--9235},
+  year={2019}
+}
+```
