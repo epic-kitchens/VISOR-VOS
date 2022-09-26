@@ -83,8 +83,23 @@ python eval.py -g 0 -s val -y 17 -D ../data/VISOR -p ../visor_weights/coco_lr_fi
 ```
 
 
+
 ## Acknowledgement
-We use the code in the original STM implementation from [official STM repository](https://github.com/seoungwugoh/STM) and the implementation from [STM training repository](https://github.com/haochenheheda/Training-Code-of-STM)
+
+When use this repo, any of our models or dataset, you need to cite the VISOR paper
+
+## Citing VISOR
+```
+@inproceedings{VISOR2022,
+  title = {EPIC-KITCHENS VISOR Benchmark: VIdeo Segmentations and Object Relations},
+  author = {Darkhalil, Ahmad and Shan, Dandan and Zhu, Bin and Ma, Jian and Kar, Amlan and Higgins, Richard and Fidler, Sanja and Fouhey, David and Damen, Dima},
+  booktitle = {Proceedings of the Neural Information Processing Systems (NeurIPS) Track on Datasets and Benchmarks},
+  year = {2022}
+}
+```
+
+We use the code in the original STM implementation from [official STM repository](https://github.com/seoungwugoh/STM) and the implementation from [STM training repository](https://github.com/haochenheheda/Training-Code-of-STM). Using this code, you also need to cite STM
+
 ## Citing STM
 ```
 @inproceedings{oh2019video,
