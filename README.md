@@ -32,4 +32,5 @@ This repository contains the codes to train STM on [VISOR](https://epic-kitchens
   |- annotations
       |- instances_train2017.json
 ```
+![3x5_images-1](https://user-images.githubusercontent.com/24276671/192190134-eeb6492d-3e70-4363-8bdf-1f5ec5887fe4.png)
 
