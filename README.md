@@ -5,31 +5,30 @@ This repository contains the codes to train STM on [VISOR](https://epic-kitchens
 
 
 # Requirements
-- python 3.9.7
+- Python 3.9.7
 - Numpy 1.20.3
 - Pillow 8.4.0
-- opencv-python 4.5.5
-- imgaug 0.4.0
-- scipy 1.7.1
-- tqdm 4.62.3
-- pandas 1.3.4
+- Opencv-python 4.5.5
+- Imgaug 0.4.0
+- Scipy 1.7.1
+- Tqdm 4.62.3
+- Pandas 1.3.4
 
 
 
 #### Dataset Structure
 ```
- |- data
-      |- VISOR
-          |- JPEGImages
-          |- Annotations
-          |- ImageSets
-             |- train.txt
-             |- val.txt
-             |- val_unseen.txt
+|- VISOR
+  |- JPEGImages
+  |- Annotations
+  |- ImageSets
+     |- train.txt
+     |- val.txt
+     |- val_unseen.txt
 
-      |- MS-COCO
-          |- train2017
-          |- annotations
-              |- instances_train2017.json
+|- MS-COCO
+  |- train2017
+  |- annotations
+      |- instances_train2017.json
 ```
 
