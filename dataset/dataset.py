@@ -9,14 +9,14 @@ from torch.utils import data
 
 import glob
 direction_m = False
-class DAVIS_MO_Test(data.Dataset):
+class VISOR_MO_Test(data.Dataset):
     # for multi object, do shuffling
 
     def __init__(self, root, imset='2017/train.txt', resolution='480p', single_object=False):
         self.root = root
         self.mask_dir = os.path.join(root, 'Annotations', resolution)
         self.mask480_dir = self.mask_dir #os.path.join(root, 'Annotations', '480p')
-        self.image_dir = os.path.join(root, 'JPEGImages', '480p')
+        self.image_dir = os.path.join(root, 'JPEGImages', resolution)
         _imset_dir = os.path.join(root, 'ImageSets')
         _imset_f = os.path.join(_imset_dir, imset)
 

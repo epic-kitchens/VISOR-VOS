@@ -23,7 +23,7 @@ import copy
 
 
 ### My libs
-from dataset.dataset2 import DAVIS_MO_Test
+from dataset.dataset import VISOR_MO_Test
 #from dataset.dataset import DAVIS_MO_Test
 from model.model import STM
 
@@ -185,9 +185,9 @@ if __name__ == "__main__":
         parser.add_argument("-g", type=str, help="0; 0,1; 0,3; etc", required=True)
         parser.add_argument("-s", type=str, help="set", required=True)
         parser.add_argument("-y", type=int, help="year", required=True)
-        parser.add_argument("-D", type=str, help="path to data",default='/smart/haochen/cvpr/data/DAVIS/')
-        parser.add_argument("-backbone", type=str, help="backbone['resnet50', 'resnet18','resnest101']",default='resnet50')
-        parser.add_argument("-p", type=str, help="path to weights",default='/smart/haochen/cvpr/weights/davis_youtube_resnet50_799999.pth')
+        parser.add_argument("-D", type=str, help="path to data",default='/smart/haochen/cvpr/data/visor/')
+        parser.add_argument("-backbone", type=str, help="backbone ['resnet50', 'resnet18','resnest101']",default='resnet50')
+        parser.add_argument("-p", type=str, help="path to weights",default='../visor_weights/coco_lr_fix_skip_0_1_release_resnet50_400000_32_399999.pth')
         return parser.parse_args()
 
     args = get_arguments()
@@ -199,13 +199,13 @@ if __name__ == "__main__":
 
     # Model and version
     MODEL = 'STM'
-    print(MODEL, ': Testing on DAVIS')
+    print(MODEL, ': Testing on VISOR')
 
     os.environ['CUDA_VISIBLE_DEVICES'] = GPU
     if torch.cuda.is_available():
         print('using Cuda devices, num:', torch.cuda.device_count())
 
-    Testloader = DAVIS_MO_Test(DATA_ROOT, resolution='480p', imset='20{}/{}.txt'.format(YEAR,SET), single_object=(YEAR==16))
+    Testloader = VISOR_MO_Test(DATA_ROOT, resolution='480p', imset='20{}/{}.txt'.format(YEAR,SET), single_object=(YEAR==16))
     model = nn.DataParallel(STM(args.backbone))
     if torch.cuda.is_available():
         model.cuda()

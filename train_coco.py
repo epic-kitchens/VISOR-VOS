@@ -21,7 +21,7 @@ import copy
 import random
 #####freeze_bn()
 ### My libs
-from dataset.dataset import DAVIS_MO_Test
+from dataset.dataset import VISOR_MO_Test
 from dataset.coco import Coco_MO_Train
 from model.model import STM
 from eval import evaluate
@@ -30,8 +30,8 @@ from utils.helpers import overlay_davis
 
 def get_arguments():
     parser = argparse.ArgumentParser(description="SST")
-    parser.add_argument("-Ddavis", type=str, help="path to davis",default='/smart/haochen/cvpr/data/DAVIS/')
-    parser.add_argument("-Dcoco", type=str, help="path to coco",default='/smart/haochen/cvpr/data/COCO/coco/')
+    parser.add_argument("-Dvisor", type=str, help="path to visor",default='../visor/')
+    parser.add_argument("-Dcoco", type=str, help="path to coco",default='../coco/')
     parser.add_argument("-batch", type=int, help="batch size",default=4)
     parser.add_argument("-max_skip", type=int, help="max skip between training frames",default=25)
     parser.add_argument("-change_skip_step", type=int, help="change max skip per x iter",default=3000)
@@ -46,9 +46,9 @@ args = get_arguments()
 
 
 
-DAVIS_ROOT = args.Ddavis
+VISOR_ROOT = args.Dvisor
 COCO_ROOT = args.Dcoco
-palette = Image.open(DAVIS_ROOT + '/Annotations/480p/blackswan/00000.png').getpalette()
+palette = Image.open(os.path.join(VISOR_ROOT + 'Annotations/480p/P01_01_seq_00001/P01_01_frame_0000000140.png')).getpalette()
 
 torch.backends.cudnn.benchmark = True
 
@@ -56,7 +56,7 @@ Trainset1 = Coco_MO_Train('{}train2017'.format(COCO_ROOT),'{}annotations/instanc
 Trainloader1 = data.DataLoader(Trainset1, batch_size=1, num_workers=1,shuffle = True, pin_memory=True)
 loader_iter1 = iter(Trainloader1)
 
-Testloader = DAVIS_MO_Test(DAVIS_ROOT, resolution='480p', imset='20{}/{}.txt'.format(17,'val'), single_object=False)
+Testloader = VISOR_MO_Test(VISOR_ROOT, resolution='480p', imset='20{}/{}.txt'.format(17,'val'), single_object=False)
 
 
 model = nn.DataParallel(STM(args.backbone))

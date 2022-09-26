@@ -12,18 +12,18 @@ import random
 import glob
 
 import pdb
-from dataset.aug import aug_heavy
+from aug import aug_heavy
 
 
 MAX_OBJECT_NUM_PER_SAMPLE = 15
-class DAVIS_MO_Train(data.Dataset):
+class VISOR_MO_Train(data.Dataset):
     # for multi object, do shuffling
 
     def __init__(self, root, imset='2017/train.txt', resolution='480p', single_object=False):
         self.root = root
         self.mask_dir = os.path.join(root, 'Annotations', resolution)
-        self.mask480_dir = os.path.join(root, 'Annotations', '480p')
-        self.image_dir = os.path.join(root, 'JPEGImages', '480p')
+        self.mask480_dir = os.path.join(root, 'Annotations', resolution)
+        self.image_dir = os.path.join(root, 'JPEGImages', resolution)
         _imset_dir = os.path.join(root, 'ImageSets')
         _imset_f = os.path.join(_imset_dir, imset)
 
@@ -145,12 +145,14 @@ if __name__ == '__main__':
     import os
     import pdb
 
-    davis_root = '/mnt/storage/home/ru20956/scratch/DAVIS_FOR_EVAL_2fps'
-    dataset = DAVIS_MO_Train(davis_root)
+    visor_root = '../data/VISOR_2022'
+    dataset = VISOR_MO_Train(visor_root)
     dataset.skip = 2
-    palette = Image.open('/mnt/storage/home/ru20956/scratch/DAVIS/Annotations/480p/blackswan/00000.png').getpalette()
+    palette = Image.open(os.path.join(visor_root + 'Annotations/480p/P01_01_seq_00001/P01_01_frame_0000000140.png')).getpalette()
+
 
     output_dir = 'tmp'
+    print('Generating 3-images samples for the whole dataset:')
     if not os.path.exists(output_dir):
         os.makedirs(output_dir)
 

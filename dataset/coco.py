@@ -411,14 +411,14 @@ if __name__ == '__main__':
         parser = argparse.ArgumentParser(description="xxx")
         parser.add_argument("-o", type=str, help="", default='./tmp')
         parser.add_argument("-Dcoco", type=str, help="path to coco",default='/smart/haochen/cvpr/data/COCO/coco/')
-        parser.add_argument("-Ddavis", type=str, help="path to davis",default='/smart/haochen/cvpr/data/DAVIS/')
+        parser.add_argument("-Dvisor", type=str, help="path to visor",default='/smart/haochen/cvpr/data/DAVIS/')
         return parser.parse_args()
     args = get_arguments()
-    davis_root = args.Ddavis
+    visor_root = args.Dvisor
     coco_root = args.Dcoco
     output_dir = args.o
     dataset = Coco_MO_Train('{}train2017'.format(coco_root),'{}annotations/instances_train2017.json'.format(coco_root))
-    palette = Image.open('{}Annotations/480p/blackswan/00000.png'.format(davis_root)).getpalette()
+    palette = Image.open(os.path.join(visor_root + 'Annotations/480p/P01_01_seq_00001/P01_01_frame_0000000140.png')).getpalette()
 
     if not os.path.exists(output_dir):
         os.makedirs(output_dir)

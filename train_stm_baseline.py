@@ -22,8 +22,8 @@ import random
 
 
 ### My libs
-from dataset.dataset import DAVIS_MO_Test
-from dataset.davis import DAVIS_MO_Train
+from dataset.dataset import VISOR_MO_Test
+from dataset.visor import VISOR_MO_Train
 from model.model import STM
 #from eval_custome import evaluate
 from eval import evaluate
@@ -33,7 +33,7 @@ import wandb
 
 def get_arguments():
     parser = argparse.ArgumentParser(description="SST")
-    parser.add_argument("-Ddavis", type=str, help="path to data",default='/smart/haochen/cvpr/data/DAVIS/')
+    parser.add_argument("-Dvisor", type=str, help="path to data",default='../data/VISOR/')
     parser.add_argument("-batch", type=int, help="batch size",default=4)
     parser.add_argument("-max_skip", type=int, help="max skip between training frames",default=25)
     parser.add_argument("-change_skip_step", type=int, help="change max skip per x iter",default=3000)
@@ -52,16 +52,16 @@ args = get_arguments()
 
 rate = args.sample_rate
 
-DATA_ROOT = args.Ddavis
-palette = Image.open('/jmain02/home/J2AD001/wwp01/shared/data/DAVIS_FOR_EVAL/00000.png').getpalette()
+DATA_ROOT = args.Dvisor
+palette = Image.open(os.path.join(DATA_ROOT + 'Annotations/480p/P01_01_seq_00001/P01_01_frame_0000000140.png')).getpalette()
 
 torch.backends.cudnn.benchmark = True
 
-Trainset_sparse = DAVIS_MO_Train(DATA_ROOT, resolution='480p', imset='20{}/{}.txt'.format(17,'train_val'), single_object=False)
+Trainset_sparse = VISOR_MO_Test(DATA_ROOT, resolution='480p', imset='20{}/{}.txt'.format(17,'train_val'), single_object=False)
 Trainloader_sparse = data.DataLoader(Trainset_sparse, batch_size=1, num_workers=1,shuffle = True, pin_memory=True)
 loader_iter_sparse = iter(Trainloader_sparse)
 
-Testloader = DAVIS_MO_Test(DATA_ROOT, resolution='480p_test', imset='20{}/{}.txt'.format(17,'test_sample'), single_object=False)
+Testloader = VISOR_MO_Test(DATA_ROOT, resolution='480p_test', imset='20{}/{}.txt'.format(17,'test_sample'), single_object=False)
 
 model = nn.DataParallel(STM(args.backbone))
 pth_path = args.resume_path
