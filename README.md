@@ -17,12 +17,13 @@ This repository contains the codes to train STM on [VISOR](https://epic-kitchens
 ## Datasets
 
 #### [MS-COCO](https://cocodataset.org/#home)
-MS-COCO instance segmentation dataset is used to generate synthitic video out of 3 frames to train STM. This could be helpful as a pretraining stage before doing the main training on VISOR.
+MS-COCO instance segmentation dataset is used to generate synthitic video out of 3 frames to train STM. This could be helpful as a pretraining stage before doing the main training on VISOR. <br>
+
 ![image](https://user-images.githubusercontent.com/19390123/115352832-62fb7d00-a1ea-11eb-9fbe-1f84bf74905d.png)
 
 
 #### [VISOR](https://epic-kitchens.github.io/VISOR/)
-After pretrain on MS-COCO, we fine-tune on VISOR dataset by sample 3 frames from a sequence in each training iteration. To visualize VISOR dataset, you can check [VISOR-VIS]()
+After pretrain on MS-COCO, we fine-tune on VISOR dataset by sample 3 frames from a sequence in each training iteration. To visualize VISOR dataset, you can check [VISOR-VIS](https://github.com/epic-kitchens/VISOR-VIS)
 ![3x5_images-1](https://user-images.githubusercontent.com/24276671/192190134-eeb6492d-3e70-4363-8bdf-1f5ec5887fe4.png)
 
 
