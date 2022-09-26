@@ -87,10 +87,10 @@ def Run_video(dataset,video, num_frames, num_objects,model,Mem_every=None, Mem_n
         
         
         ##this to save images
-        palette = Image.open('/jmain02/home/J2AD001/wwp01/shared/data/DAVIS_FOR_EVAL/00000.png').getpalette()
+        palette = Image.open(os.path.join(DATA_ROOT + 'Annotations/480p/P01_01_seq_00001/P01_01_frame_0000000140.png')).getpalette()
 
         #print(video)
-        test_path = os.path.join('/jmain02/home/J2AD001/wwp01/axd53-wwp01/codes/results_official_test_unseen', video)
+        test_path = os.path.join('../output', video)
 
         if not os.path.exists(test_path):
             os.makedirs(test_path)
