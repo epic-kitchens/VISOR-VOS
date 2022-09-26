@@ -1,11 +1,12 @@
 # VISOR-VOS
 
+This repository contains the code to replicate the Video Object Segmentations benchmark of the VISOR dataset. It replicates the results of table 3 in our paper: EPIC-KITCHENS VISOR Benchmark: VIdeo Segmentations and Object Relations
 
 This repository contains the codes to train STM on [VISOR](https://epic-kitchens.github.io/VISOR/) dataset [Space-Time Memory Networks (STM)](https://openaccess.thecvf.com/content_ICCV_2019/html/Oh_Video_Object_Segmentation_Using_Space-Time_Memory_Networks_ICCV_2019_paper.html)
 
 <br>
 
-## Performance on VISOR
+## Download pre-trained models
 
 | backbone |  training stage | training dataset | J&F | J |  F  | weights |
 | ------------- | ------------- | ------------- | ------------- | ------------- | ------------- | ------------- |
@@ -82,9 +83,22 @@ python eval.py -g "gpu id" -s "set" -y "year" -D "path to visor" -p "path to wei
 python eval.py -g 0 -s val -y 17 -D ../data/VISOR -p ../visor_weights/coco_lr_fix_skip_0_1_release_resnet50_400000_32_399999.pth -backbone resnet50
 ```
 
-
 ## Acknowledgement
-We use the code in the original STM implementation from [official STM repository](https://github.com/seoungwugoh/STM) and the implementation from [STM training repository](https://github.com/haochenheheda/Training-Code-of-STM)
+
+When use this repo, any of our models or dataset, you need to cite the VISOR paper
+
+## Citing VISOR
+```
+@inproceedings{VISOR2022,
+  title = {EPIC-KITCHENS VISOR Benchmark: VIdeo Segmentations and Object Relations},
+  author = {Darkhalil, Ahmad and Shan, Dandan and Zhu, Bin and Ma, Jian and Kar, Amlan and Higgins, Richard and Fidler, Sanja and Fouhey, David and Damen, Dima},
+  booktitle = {Proceedings of the Neural Information Processing Systems (NeurIPS) Track on Datasets and Benchmarks},
+  year = {2022}
+}
+```
+
+We use the code in the original STM implementation from [official STM repository](https://github.com/seoungwugoh/STM) and the implementation from [STM training repository](https://github.com/haochenheheda/Training-Code-of-STM). Using this code, you also need to cite STM
+
 ## Citing STM
 ```
 @inproceedings{oh2019video,
@@ -95,3 +109,7 @@ We use the code in the original STM implementation from [official STM repository
   year={2019}
 }
 ```
+
+# License
+
+The code is published under the Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License, found [here](https://creativecommons.org/licenses/by-nc-sa/4.0/).
