@@ -87,10 +87,10 @@ def Run_video(dataset,video, num_frames, num_objects,model,Mem_every=None, Mem_n
         
         
         ##this to save images
-        palette = Image.open(os.path.join(DATA_ROOT + 'Annotations/480p/P01_01_seq_00001/P01_01_frame_0000000140.png')).getpalette()
+        palette = Image.open('/jmain02/home/J2AD001/wwp01/shared/data/DAVIS_FOR_EVAL/00000.png').getpalette()
 
         #print(video)
-        test_path = os.path.join('../output', video)
+        test_path = os.path.join('/jmain02/home/J2AD001/wwp01/axd53-wwp01/codes/r', video)
 
         if not os.path.exists(test_path):
             os.makedirs(test_path)
@@ -156,7 +156,7 @@ def evaluate(model,Testloader,metric):
         j_metrics_res, f_metrics_res = evaluate_semisupervised(all_gt_masks, all_res_masks, None, metric)
         for ii in range(all_gt_masks.shape[0]):
             if 'J' in metric:
-                print('>> J : ',j_metrics_res[ii])
+                #print('>> J : ',j_metrics_res[ii])
                 [JM, JR, JD] = utils.db_statistics(j_metrics_res[ii])
                 metrics_res['J']["M"].append(JM)
                 metrics_res['J']["R"].append(JR)
@@ -173,6 +173,8 @@ def evaluate(model,Testloader,metric):
     final_mean = (np.mean(J["M"]) + np.mean(F["M"])) / 2.
     g_res = np.array([final_mean, np.mean(J["M"]), np.mean(J["R"]), np.mean(J["D"]), np.mean(F["M"]), np.mean(F["R"]),
                       np.mean(F["D"])])
+
+    print("scores: [J&F-Mean, J-Mean, J-Recall, J-Decay, F-Mean, F-Recall, F-Decay] are:")
     return g_res
 	    
 
@@ -214,5 +216,5 @@ if __name__ == "__main__":
 
     model.load_state_dict(torch.load(pth))
     metric = ['J','F']
-    
+
     print(evaluate(model,Testloader,metric))
