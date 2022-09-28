@@ -59,7 +59,7 @@ To run the training or evaluation scripts, the dataset format should be as follo
 To generate the required structure you have to download the [VISOR](https://epic-kitchens.github.io/VISOR/) train/val images and json files first , then you can run ```visor_to_davis.py``` script with the following parameters:
 
 `set`: **train** or **val**, which is the split that you want to generate DAVIS-like dataset for. <br>
-`keep_first_frame_masks_only`: **0** or **1**, this flag to keep all masks for each sequence or the masks in the first frame only, this flag usually 1 when generating  **val** and 0 when generating **train**
+`keep_first_frame_masks_only`: **0** or **1**, this flag to keep all masks for each sequence or the masks in the first frame only, this flag usually 1 when generating  **val** and 0 when generating **train**<br>
 `visor_jsons_root`: path to the json files of visor, the train and val folders should exists under this root directory as follows: 
 ```
 |- visor_jsons_root
