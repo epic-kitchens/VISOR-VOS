@@ -40,7 +40,7 @@ After pretrain on MS-COCO, we fine-tune on VISOR dataset by sample 3 frames from
 To run the training or evaluation scripts, the dataset format should be as follows (following [DAVIS](https://davischallenge.org/) format), a script is given in the next step to convert VISOR to DAVIS-like dataset.
 ```
 
-|- VISOR
+|- VISOR_2022
   |- JPEGImages
   |- Annotations
   |- ImageSets
