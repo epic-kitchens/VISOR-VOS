@@ -1,8 +1,6 @@
 # VISOR-VOS
 
-This repository contains the code to replicate the Video Object Segmentations benchmark of the VISOR dataset. It replicates the results of table 3 in our paper: EPIC-KITCHENS VISOR Benchmark: VIdeo Segmentations and Object Relations
-
-This repository contains the codes to train STM on [VISOR](https://epic-kitchens.github.io/VISOR/) dataset [Space-Time Memory Networks (STM)](https://openaccess.thecvf.com/content_ICCV_2019/html/Oh_Video_Object_Segmentation_Using_Space-Time_Memory_Networks_ICCV_2019_paper.html)
+This repository contains the code to replicate the Video Object Segmentations benchmark of the [VISOR](https://epic-kitchens.github.io/VISOR/) dataset. It replicates the results of table 3 in our paper: EPIC-KITCHENS VISOR Benchmark: VIdeo Segmentations and Object Relations
 
 <br>
 
@@ -39,16 +37,17 @@ After pretrain on MS-COCO, we fine-tune on VISOR dataset by sample 3 frames from
 
 
 #### Dataset Structure
-To run the training or evaluation scripts, the dataset format should be as follows (following [DAVIS](https://davischallenge.org/) format):
+To run the training or evaluation scripts, the dataset format should be as follows (following [DAVIS](https://davischallenge.org/) format), a script is given in the next step to convert VISOR to DAVIS-like dataset.
 ```
 
 |- VISOR
   |- JPEGImages
   |- Annotations
   |- ImageSets
-     |- train.txt
-     |- val.txt
-     |- val_unseen.txt
+     |- 2022
+        |- train.txt
+        |- val.txt
+        |- val_unseen.txt
 
 |- MS-COCO
   |- train2017
@@ -56,13 +55,48 @@ To run the training or evaluation scripts, the dataset format should be as follo
       |- instances_train2017.json
 ```
 
+#### VISOR to DAVIS-like format
+To generate the required structure you have to download the [VISOR](https://epic-kitchens.github.io/VISOR/) train/val images and json files first , then you can run ```visor_to_davis.py``` script with the following parameters:
 
+`set`: **train** or **val**, which is the split that you want to generate DAVIS-like dataset for. <br>
+`keep_first_frame_masks_only`: **0** or **1**, this flag to keep all masks for each sequence or the masks in the first frame only, this flag usually 1 when generating  **val** and 0 when generating **train**
+`visor_jsons_root`: path to the json files of visor, the train and val folders should exists under this root directory as follows: 
+```
+|- visor_jsons_root
+   |- train
+      |- P01_01.json
+      |- PXX_(X)XX.json
+   |- val
+      |- P01_107.json
+      |- PXX_(X)XX.json
+```
+`images_root`: path to the RGB images root directory. The images should be in the following structure: 
+```
+|- images_root
+   |- P01_01
+      |- P01_01_frame_xxxxxxxxxx.jpg
+   |- PXX_XXX
+      |- PXX_(X)XX_frame_xxxxxxxxxx.jpg
+```
+`output_directory`: path to the directory where you want VISOR to be, a VISOR_2022 directory would be automatically created with DAVIS-like formatting. <br>
+`output_resolution`: resolution of the output images and masks, however, the VOS baseline tested on 480p which is the default value for this parameter.
+<br>
+This is sample run of the script to generate train and val with 480p resolution, **you must run it twice, one to generate train and another one to generate val**, note that the keep_first_frame_masks_only changes since you have to keep all masks in the training split unlike the validation where we have to keep the masks in the first frame only for proper evaluation:
+```
+To generate val:
+python visor_to_davis.py -set val -keep_first_frame_masks_only 1  -visor_jsons_root . -images_root ../VISOR_Images/Images_fixed -output_directory ../out_data
+
+To generate train:
+python visor_to_davis.py -set train -keep_first_frame_masks_only 0  -visor_jsons_root . -images_root ../VISOR_Images/Images_fixed -output_directory ../out_data
+```
+
+The scripts also will create the txt files that should be in the DAVIS-like dataset structre. Also it creates mapping files under the `output_directory` to maps each colors in the images with the object name in VISOR for any object-related analysis.
 ## Training
 
 #### Stage 1
-To pretrain on MS-COCO, you can run the following command.
+To pretrain on MS-COCO, you can run the following script.
 ```
-python train_coco.py -Dvisor "path to visor" -Dcoco "path to coco" -backbone "[resnet50,resnet18]" -save "path to checkpoints"
+python train_coco.py -Dvisor "path to visor" -Dcoco "path to coco" -backbone "[resnet50,resnet18]" -save "path to save models"
 #e.g.
 python train_coco.py -Dvisor ../data/Davis/ -Dcoco ../data/Ms-COCO/ -backbone resnet50 -save ../coco_weights/
 ```
@@ -70,9 +104,9 @@ python train_coco.py -Dvisor ../data/Davis/ -Dcoco ../data/Ms-COCO/ -backbone re
 #### Stage 2
 Main traning on VISOR, to get the best performance, you should resume from the MS-COCO pretrained model in Stage 1.
 ```
-python train_stm_baseline.py -Dvisor "path to visor" -backbone "[resnet50,resnet18]" -save "path to checkpoints" -resume "path to coco pretrained weights"
+python train_stm_baseline.py -Dvisor "path to visor" -total_iter "total number of iterations" -test_iter "test every this number of iterations" -backbone "[resnet50,resnet18]" -wandb_logs "1 if you want to save the logs into your wandb account (offline)" -save "path to save models" -resume "path to coco pretrained weights"
 #e.g. 
-train_stm_baseline.py -Dvisor ../data/VISOR/ -backbone resnet50 -save ../visor_weights/ -resume ../coco_weights/coco_res50.pth
+python train_stm_baseline.py -Dvisor  ../VISOR_2022/ -total_iter 400000 -test_iter 40000 -batch 32 -backbone resnet50 -save ../visor_weights/ -name experiment1 -wandb_logs 0  -resume ../coco_weights/coco_res50.pth
 ```
 
 ## Evaluation
