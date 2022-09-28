@@ -114,7 +114,7 @@ Evaluating on VISOR based on DAVIS evaluation codes, we adjusted the codes to in
 ```
 python eval.py -g "gpu id" -s "set" -y "year" -D "path to visor" -p "path to weights" -backbone "[resnet50,resnet18,resnest101]"
 #e.g.
-python eval.py -g 0 -s val -y 17 -D ../data/VISOR -p ../visor_weights/coco_lr_fix_skip_0_1_release_resnet50_400000_32_399999.pth -backbone resnet50
+python eval.py -g 0 -s val -y 22 -D ../data/VISOR -p ../visor_weights/coco_lr_fix_skip_0_1_release_resnet50_400000_32_399999.pth -backbone resnet50
 ```
 
 ## Acknowledgement
