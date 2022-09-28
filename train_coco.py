@@ -33,6 +33,9 @@ def get_arguments():
     parser.add_argument("-Dvisor", type=str, help="path to visor",default='../visor/')
     parser.add_argument("-Dcoco", type=str, help="path to coco",default='../coco/')
     parser.add_argument("-batch", type=int, help="batch size",default=4)
+    parser.add_argument("-resolution", type=str, help="resolution of the dataset",default='480p')
+    parser.add_argument("-val_set_txt", type=str, help="name of the text file that contains the validation sequences(for evaluation)",default='val')    
+    parser.add_argument("-year", type=int, help="last 2 digits of the year of the dataset release",default=22)
     parser.add_argument("-max_skip", type=int, help="max skip between training frames",default=25)
     parser.add_argument("-change_skip_step", type=int, help="change max skip per x iter",default=3000)
     parser.add_argument("-total_iter", type=int, help="total iter num",default=800000)
@@ -48,6 +51,9 @@ args = get_arguments()
 
 VISOR_ROOT = args.Dvisor
 COCO_ROOT = args.Dcoco
+resolution = args.resolution
+year = args.year
+val_set_txt = args.val_set_txt
 palette = Image.open(os.path.join(VISOR_ROOT + 'Annotations/480p/P01_01_seq_00001/P01_01_frame_0000000140.png')).getpalette()
 
 torch.backends.cudnn.benchmark = True
@@ -56,7 +62,7 @@ Trainset1 = Coco_MO_Train('{}train2017'.format(COCO_ROOT),'{}annotations/instanc
 Trainloader1 = data.DataLoader(Trainset1, batch_size=1, num_workers=1,shuffle = True, pin_memory=True)
 loader_iter1 = iter(Trainloader1)
 
-Testloader = VISOR_MO_Test(VISOR_ROOT, resolution='480p', imset='20{}/{}.txt'.format(17,'val'), single_object=False)
+Testloader = VISOR_MO_Test(VISOR_ROOT, resolution=resolution, imset='20{}/{}.txt'.format(year,val_set_txt), single_object=False)
 
 
 model = nn.DataParallel(STM(args.backbone))

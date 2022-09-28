@@ -28,13 +28,18 @@ from model.model import STM
 #from eval_custome import evaluate
 from eval import evaluate
 from utils.helpers import overlay_davis
-import wandb
+
 
 
 def get_arguments():
     parser = argparse.ArgumentParser(description="SST")
     parser.add_argument("-Dvisor", type=str, help="path to data",default='../data/VISOR/')
+    parser.add_argument("-resolution", type=str, help="resolution of the dataset",default='480p')
+    parser.add_argument("-train_set_txt", type=str, help="name of the text file that contains the traning sequences",default='train')
+    parser.add_argument("-val_set_txt", type=str, help="name of the text file that contains the validation sequences(for evaluation)",default='val')    
+    parser.add_argument("-year", type=int, help="last 2 digits of the year of the dataset release",default=22)
     parser.add_argument("-batch", type=int, help="batch size",default=4)
+    parser.add_argument("-wandb_logs", type=int, help="if you want the wandb logs to be saved",default=0)
     parser.add_argument("-max_skip", type=int, help="max skip between training frames",default=25)
     parser.add_argument("-change_skip_step", type=int, help="change max skip per x iter",default=3000)
     parser.add_argument("-total_iter", type=int, help="total iter num",default=800000)
@@ -42,7 +47,7 @@ def get_arguments():
     parser.add_argument("-log_iter", type=int, help="log per x iters",default=500)
     parser.add_argument("-resume_path",type=str,default='')
     parser.add_argument("-save",type=str,default='../weights')
-    parser.add_argument("-name",type=str,default='default')
+    parser.add_argument("-name",type=str,default='experiment')
     parser.add_argument("-sample_rate",type=float,default=0.08)
     parser.add_argument("-backbone", type=str, help="backbone ['resnet50', 'resnet18','resnet101]",default='resnet50')
 
@@ -51,17 +56,22 @@ def get_arguments():
 args = get_arguments()
 
 rate = args.sample_rate
+resolution = args.resolution
+year = args.year
+train_set_txt = args.train_set_txt
+val_set_txt = args.val_set_txt
+wandb_logs = args.wandb_logs
 
 DATA_ROOT = args.Dvisor
 palette = Image.open(os.path.join(DATA_ROOT + 'Annotations/480p/P01_01_seq_00001/P01_01_frame_0000000140.png')).getpalette()
 
 torch.backends.cudnn.benchmark = True
 
-Trainset_sparse = VISOR_MO_Test(DATA_ROOT, resolution='480p', imset='20{}/{}.txt'.format(17,'train_val'), single_object=False)
+Trainset_sparse = VISOR_MO_Train(DATA_ROOT, resolution=resolution, imset='20{}/{}.txt'.format(year,train_set_txt), single_object=False)
 Trainloader_sparse = data.DataLoader(Trainset_sparse, batch_size=1, num_workers=1,shuffle = True, pin_memory=True)
 loader_iter_sparse = iter(Trainloader_sparse)
 
-Testloader = VISOR_MO_Test(DATA_ROOT, resolution='480p_test', imset='20{}/{}.txt'.format(17,'test_sample'), single_object=False)
+Testloader = VISOR_MO_Test(DATA_ROOT, resolution=resolution, imset='20{}/{}.txt'.format(year,val_set_txt), single_object=False)
 
 model = nn.DataParallel(STM(args.backbone))
 pth_path = args.resume_path
@@ -89,44 +99,44 @@ criterion.cuda()
 optimizer = torch.optim.Adam(model.parameters(),lr = 1e-5,eps=1e-8, betas=[0.9,0.999])
 
 def adjust_learning_rate(iteration,power = 0.9):
-    lr = 1e-5 * pow((1 - 1.0 * iteration / args.total_iter), power)
-    #lr = 1e-5
+    #lr = 1e-5 * pow((1 - 1.0 * iteration / args.total_iter), power)
+    lr = 1e-5 #for fixed lr
     return lr
 
 
 accumulation_step = args.batch
 save_step = args.test_iter
 log_iter = args.log_iter
-rate1=0.5
+
 loss_momentum = 0
-sparse_loss=0
-dense_loss=0
-sparse_setp=0
-dense_step=0
 max_skip = 1
 #change_skip_step = args.change_skip_step
 change_skip_step = args.total_iter/(max_skip+1)
 skip_n = 0
 max_jf = 0
-os.environ['WANDB_MODE'] = "offline"
-wandb.init(project="official_release",name=f"{args.name}",config={
-      "batch": accumulation_step,
-      "initialization": "scratch_train_val",
-      "architecture": "CNN",
-      "split": "train_val=>test",
-      "iterations": args.total_iter,
-      "save_step":save_step,
-      "max_skip":max_skip,
-      "Backbone_resume":args.resume_path,
-      "Name":args.name,} )
+
+if wandb_logs:
+    import wandb
+    os.environ['WANDB_MODE'] = "offline"
+    wandb.init(project="official_release",name=f"{args.name}",config={
+          "batch": accumulation_step,
+          "initialization": "coco",
+          "architecture": "CNN",
+          "split": "train=>val",
+          "iterations": args.total_iter,
+          "save_step":save_step,
+          "max_skip":max_skip,
+          "Backbone_resume":args.resume_path,
+          "Name":args.name,} )
 
 
 for iter_ in range(args.total_iter):
     if (iter_ == 0):
         print('Evaluate at iter: ' + str(iter_))
         g = evaluate(model,Testloader,['J','F'])
-        print("acc:",g[0])
-        wandb.log({'iteration':iter_,'J&F-Mean':g[0], 'J-Mean':g[1], 'J-Recall':g[2], 'J-Decay':g[3], 'F-Mean':g[4], 'F-Recall':g[5], 'F-Decay':g[6]})
+        print("J&F:",g[0])
+        if wandb_logs:
+            wandb.log({'iteration':iter_,'J&F-Mean':g[0], 'J-Mean':g[1], 'J-Recall':g[2], 'J-Decay':g[3], 'F-Mean':g[4], 'F-Recall':g[5], 'F-Decay':g[6]})
 
 
     if (iter_ + 1) % 1000 == 0:
@@ -184,7 +194,8 @@ for iter_ in range(args.total_iter):
 
     if ((iter_+1) % log_iter == 0):
         print('iteration:{}, loss:{},remaining iteration:{}'.format(iter_,loss_momentum/log_iter,args.total_iter - iter_))
-        wandb.log({'loss_iteration':iter_,"train_loss": loss_momentum/log_iter})
+        if wandb_logs:
+            wandb.log({'loss_iteration':iter_,"train_loss": loss_momentum/log_iter})
         loss_momentum = 0
 
 
@@ -199,8 +210,9 @@ for iter_ in range(args.total_iter):
         
         print('Evaluate at iter: ' + str(iter_))
         g = evaluate(model,Testloader,['J','F'])
-        print("acc:",g[0])
-        wandb.log({'iteration':iter_,'J&F-Mean':g[0], 'J-Mean':g[1], 'J-Recall':g[2], 'J-Decay':g[3], 'F-Mean':g[4], 'F-Recall':g[5], 'F-Decay':g[6]})
+        print("J&F:",g[0])
+        if wandb_logs:
+            wandb.log({'iteration':iter_,'J&F-Mean':g[0], 'J-Mean':g[1], 'J-Recall':g[2], 'J-Decay':g[3], 'F-Mean':g[4], 'F-Recall':g[5], 'F-Decay':g[6]})
 
 
         #evaluate(model,Testloader1,['J','F'],'train')
@@ -213,5 +225,6 @@ for iter_ in range(args.total_iter):
                module.eval()
             if isinstance(module, torch.nn.modules.BatchNorm3d):
                module.eval()
-# Mark the run as finished
-wandb.finish()
+if wandb_logs:
+    # Mark the run as finished
+    wandb.finish()

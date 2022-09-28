@@ -12,7 +12,7 @@ import random
 import glob
 
 import pdb
-from aug import aug_heavy
+from dataset.aug import aug_heavy
 
 
 MAX_OBJECT_NUM_PER_SAMPLE = 15

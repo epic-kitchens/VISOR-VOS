@@ -142,5 +142,10 @@ class VISOR_MO_Test(data.Dataset):
         import glob
         file_name_jpg = sorted(glob.glob(os.path.join(self.mask_dir, video,"*.png")),reverse=direction_m)[f]
         return file_name_jpg
+
+    def load_palette(self,video):
+        import glob
+        palette = Image.open(glob.glob(os.path.join(self.mask_dir, video,"*.png"))[0]).getpalette()
+        return palette
 if __name__ == '__main__':
     pass

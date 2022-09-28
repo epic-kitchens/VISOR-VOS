@@ -37,7 +37,7 @@ from evaldavis2017.davis2017.results import Results
 from scipy.optimize import linear_sum_assignment
 
 
-def Run_video(dataset,video, num_frames, num_objects,model,Mem_every=None, Mem_number=None):
+def Run_video(dataset,video, num_frames, num_objects,model,Mem_every=None, Mem_number=None,out_directory='../results_png'):
     # initialize storage tensors
     if Mem_every:
         to_memorize = [int(i) for i in np.arange(0, num_frames, step=Mem_every)]
@@ -45,6 +45,8 @@ def Run_video(dataset,video, num_frames, num_objects,model,Mem_every=None, Mem_n
         to_memorize = [int(round(i)) for i in np.linspace(0, num_frames, num=Mem_number+2)[:-1]]
     else:
         to_memorize=  [0]
+
+    palette = dataset.load_palette(video) # to load the dataset palette
     #    raise NotImplementedError
     F_last,M_last = dataset.load_single_image(video,0)
     F_last = F_last.unsqueeze(0)
@@ -87,10 +89,10 @@ def Run_video(dataset,video, num_frames, num_objects,model,Mem_every=None, Mem_n
         
         
         ##this to save images
-        palette = Image.open('/jmain02/home/J2AD001/wwp01/shared/data/DAVIS_FOR_EVAL/00000.png').getpalette()
+        #palette = Image.open(os.path.join(dataset + 'Annotations/480p/P01_01_seq_00001/P01_01_frame_0000000140.png')).getpalette()
 
         #print(video)
-        test_path = os.path.join('/jmain02/home/J2AD001/wwp01/axd53-wwp01/codes/r', video)
+        test_path = os.path.join(out_directory, video)
 
         if not os.path.exists(test_path):
             os.makedirs(test_path)
@@ -174,7 +176,7 @@ def evaluate(model,Testloader,metric):
     g_res = np.array([final_mean, np.mean(J["M"]), np.mean(J["R"]), np.mean(J["D"]), np.mean(F["M"]), np.mean(F["R"]),
                       np.mean(F["D"])])
 
-    print("scores: [J&F-Mean, J-Mean, J-Recall, J-Decay, F-Mean, F-Recall, F-Decay] are:")
+    print("scores: [J&F-Mean, J-Mean, J-Recall, J-Decay, F-Mean, F-Recall, F-Decay] are: ",g_res)
     return g_res
 	    
 
@@ -217,4 +219,4 @@ if __name__ == "__main__":
     model.load_state_dict(torch.load(pth))
     metric = ['J','F']
 
-    print(evaluate(model,Testloader,metric))
+    evaluate(model,Testloader,metric)
