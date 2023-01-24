@@ -41,6 +41,8 @@ To run the training or evaluation scripts, the dataset format should be as follo
 ```
 
 |- VISOR_2022
+  |- val_data_mapping.json
+  |- train_data_mapping.json
   |- JPEGImages
   |- Annotations
   |- ImageSets
@@ -54,6 +56,7 @@ To run the training or evaluation scripts, the dataset format should be as follo
   |- annotations
       |- instances_train2017.json
 ```
+Where `val.txt` contains the set of seqeunces that belongs to the validation split and `val_unseen.txt` contains the subset of the validation split for the unseen kitchens. Also note that mapping files would be generated i.e. `val_data_mapping.json` that represent the object names and their corresponding mask color codes, this would be helpful to get any object name related stats and it would be used by [Semi-Supervised Codalab](https://github.com/epic-kitchens/VISOR-VOS#codalab-evaluation) if you wish to participate in [EPIC-KITCHENS VISOR Semi-Supervised Video Object Segmentation Challenge](https://codalab.lisn.upsaclay.fr/competitions/9767).
 
 #### VISOR to DAVIS-like format
 To generate the required structure you have to download the [VISOR](https://epic-kitchens.github.io/VISOR/) train/val images and json files first , then you can run ```visor_to_davis.py``` script with the following parameters:
