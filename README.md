@@ -8,8 +8,8 @@ This repository contains the code to replicate the Video Object Segmentations be
 
 | backbone |  training stage | training dataset | J&F | J |  F  | weights |
 | ------------- | ------------- | ------------- | ------------- | ------------- | ------------- | ------------- |
-| resnet-50 |  stage 1 | MS-COCO | 56.9 | 55.5 | 58.2 | [`link`](https://www.dropbox.com/s/bsy577kflurboav/coco_res50.pth?dl=0) |
-| resnet-50 | stage 2 | MS-COCO -> VISOR | 75.8 | 73.6 | 78.0 | [`link`](https://www.dropbox.com/s/6vkkr6vbx7ybku3/coco_lr_fix_skip_0_1_release_resnet50_400000_32_399999.pth?dl=0) |
+| resnet-50 |  stage 1 | MS-COCO | 56.9 | 55.6 | 58.3 | [`link`](https://www.dropbox.com/s/bsy577kflurboav/coco_res50.pth?dl=0) |
+| resnet-50 | stage 2 | MS-COCO -> VISOR | 76.4 | 74.2 | 78.6 | [`link`](https://www.dropbox.com/s/6vkkr6vbx7ybku3/coco_lr_fix_skip_0_1_release_resnet50_400000_32_399999.pth?dl=0) |
 
 
 # Requirements
@@ -116,6 +116,9 @@ python eval.py -g "gpu id" -s "set" -y "year" -D "path to visor" -p "path to wei
 #e.g.
 python eval.py -g 0 -s val -y 22 -D ../data/VISOR -p ../visor_weights/coco_lr_fix_skip_0_1_release_resnet50_400000_32_399999.pth -backbone resnet50
 ```
+
+## Codalab Evaluation
+If you want to participate in our [EPIC-KITCHENS VISOR Semi-Supervised Video Object Segmentation Challenge](https://codalab.lisn.upsaclay.fr/competitions/9767), please refer to [Semi-Supervised Codalab](https://github.com/epic-kitchens/C6-SemiVOS) repository which contains all the needed details to create the submission file.
 
 ## Acknowledgement
 
