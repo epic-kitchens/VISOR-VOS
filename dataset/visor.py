@@ -71,22 +71,33 @@ class VISOR_MO_Train(data.Dataset):
         return Ms
 
     def mask_process(self,mask,f,num_object,ob_list):
+        '''
+        mask: the VISOR annotation mask (from the PNGs)
+        f: the image index, usually we select 3 images for training, so this will contain the index of each one
+        In case of f = 0, it would be the reference frame and this function will fill the values of the following parameters (otherwise they're given):
+        num_object: number of included objects in the given sequence
+        ob_list: list of included objects values 
+        '''
         n = num_object
-        mask_ = np.zeros(mask.shape).astype(np.uint8)
-        if f == 0:
-            for i in range(1,11):
-                if np.sum(mask == i) > 0:
+        mask_ = np.zeros(mask.shape).astype(np.uint8) #to save the updated masl
+        if f == 0: #if it's the first frame 
+            for i in range(1,(np.max(mask)+1)): #loop over all object codes
+                if np.sum(mask == i) > 0: #if there's a mask pixles, add it to the included objects for training
                     n += 1
-                    ob_list.append(i)
-
+                    ob_list.append(i) #this will save the current object as part of the included objects
+            '''
+            this to set max number of object per sequence, 
+            if the number of objects is more than MAX_OBJECT_NUM_PER_SAMPLE, 
+            then randomly sample MAX_OBJECT_NUM_PER_SAMPLE objects
+            '''
             if n > MAX_OBJECT_NUM_PER_SAMPLE:
                 n = MAX_OBJECT_NUM_PER_SAMPLE
                 ob_list = random.sample(ob_list,n)
-
+        #fill the new mask based on the above process
         for i,l in enumerate(ob_list):
             mask_[mask == l] = i + 1
         return mask_,n,ob_list 
-
+    
     def __len__(self):
         return len(self.videos)
 
