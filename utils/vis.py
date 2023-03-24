@@ -66,6 +66,9 @@ def generate_masks(image_name, masks_info, output_directory,objects=None, output
         scaled_mask = (np.array(scaled_mask)).astype('uint8')
         #store the image using davis color code
         imwrite_indexed(os.path.join(output_directory,image_name), scaled_mask)
+    else: # delete the corresponding jpg image
+        jpg_image_path = os.path.join(output_directory.replace('Annotations','JPEGImages'),image_name)
+        os.remove(jpg_image_path)
     return object_keys_out
 
 
