@@ -82,7 +82,7 @@ class DAVISEvaluation(object):
         for seq in tqdm(list(self.dataset.get_sequences())):
             all_gt_masks, all_void_masks, all_masks_id = self.dataset.get_all_masks(seq, True)
             if self.task == 'semi-supervised':
-                all_gt_masks, all_masks_id = all_gt_masks[:, 1:-1, :, :], all_masks_id[1:-1]
+                all_gt_masks, all_masks_id = all_gt_masks[:, 1:, :, :], all_masks_id[1:]
             all_res_masks = results.read_masks(seq, all_masks_id)
             print(all_res_masks.shape)
             if self.task == 'unsupervised':
