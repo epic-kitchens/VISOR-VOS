@@ -8,8 +8,8 @@ This repository contains the code to replicate the Video Object Segmentations be
 
 | backbone |  training stage | training dataset | J&F | J |  F  | weights |
 | ------------- | ------------- | ------------- | ------------- | ------------- | ------------- | ------------- |
-| resnet-50 |  stage 1 | MS-COCO | 56.9 | 55.6 | 58.3 | [`link`](https://www.dropbox.com/s/bsy577kflurboav/coco_res50.pth?dl=0) |
-| resnet-50 | stage 2 | MS-COCO -> VISOR | 76.4 | 74.2 | 78.6 | [`link`](https://www.dropbox.com/s/6vkkr6vbx7ybku3/coco_lr_fix_skip_0_1_release_resnet50_400000_32_399999.pth?dl=0) |
+| resnet-50 |  stage 1 | MS-COCO | 56.9 | 55.6 | 58.3 | [`link`](https://www.dropbox.com/scl/fi/6ypsxpm8jw288830r9aqg/coco_res50.pth?rlkey=50i2inek0fql423mfs64ihwwo&dl=0) |
+| resnet-50 | stage 2 | MS-COCO -> VISOR | 76.4 | 74.2 | 78.6 | [`link`](https://www.dropbox.com/scl/fi/ur6w7waov2sy6tbkwjtr6/coco_lr_fix_skip_0_1_release_resnet50_400000_32_399999.pth?rlkey=rxpirzno2t8zuolbqftm253b6&dl=0) |
 
 
 # Requirements
